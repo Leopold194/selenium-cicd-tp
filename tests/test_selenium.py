@@ -24,7 +24,7 @@ class TestCalculator:
 			chrome_options.add_argument('--disable-gpu')
 			chrome_options.add_argument('--window-size=1920,1080')
 		path = ChromeDriverManager().install()
-		if not path.endswith("chromedriver.exe"):
+		if sys.platform.startswith("win") and not path.endswith("chromedriver.exe"):
 			path = os.path.join(os.path.dirname(path), "chromedriver.exe")
 		print(path)
 		service = Service(path)
