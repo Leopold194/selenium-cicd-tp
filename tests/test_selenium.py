@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 import os
+import sys
 
 class TestCalculator:
 	@pytest.fixture(scope="class")
@@ -22,7 +23,10 @@ class TestCalculator:
 			chrome_options.add_argument('--disable-dev-shm-usage')
 			chrome_options.add_argument('--disable-gpu')
 			chrome_options.add_argument('--window-size=1920,1080')
-		service = Service(ChromeDriverManager(driver_version="138.0.7204.51").install())
+		path = ChromeDriverManager(driver_version="138.0.7204.51").install()
+		if sys.platform.startswith("win") and not path.endswith("chromedriver.exe"):
+			path = os.path.join(os.path.dirname(path), "chromedriver.exe")
+		service = Service(path)
 		driver = webdriver.Chrome(service=service, options=chrome_options)
 		driver.implicitly_wait(10)
 		yield driver
